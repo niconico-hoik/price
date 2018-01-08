@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 })
-exports.TempCare = exports.allday = exports.food = exports.milk = exports.nappy = exports.monthCare = exports.monthSpecialTime = exports.monthSundry = exports.monthEntry = undefined
+exports.TempCare = exports.tempAllday = exports.food = exports.milk = exports.nappy = exports.monthCare = exports.monthSpecialTime = exports.monthSundry = exports.monthEntry = undefined
 
 var _createClass = (function() {
   function defineProperties(target, props) {
@@ -58,7 +58,7 @@ var milk = (exports.milk = function milk() {
 var food = (exports.food = function food() {
   return _information.prices.food
 })
-var allday = (exports.allday = function allday(age) {
+var tempAllday = (exports.tempAllday = function tempAllday(age) {
   return _information.prices.temp_allday[age]
 })
 

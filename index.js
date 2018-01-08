@@ -13,7 +13,7 @@ export const monthCare = (age, day, time) =>
 export const nappy = () => prices.nappy
 export const milk = () => prices.milk
 export const food = () => prices.food
-export const allday = age => prices.temp_allday[age]
+export const tempAllday = age => prices.temp_allday[age]
 
 export class TempCare {
   constructor(from, to) {

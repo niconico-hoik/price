@@ -51,7 +51,7 @@ export var milk = function milk() {
 export var food = function food() {
   return prices.food
 }
-export var allday = function allday(age) {
+export var tempAllday = function tempAllday(age) {
   return prices.temp_allday[age]
 }
 
