@@ -1,0 +1,24 @@
+{
+  "prices": {
+    "month_entry": 5000,
+    "month_init": { "infant": 11000, "toddler": 8000 },
+    "month_charge": 2000,
+    "month_sundry": 200,
+    "month_special_time": 3000,
+    "temp_morning": 1000,
+    "temp_day": { "toddler": 500, "lower": 350, "higher": 300 },
+    "temp_evening": 1000,
+    "temp_night": 1500,
+    "temp_allday": { "toddler": 3000, "lower": 2400, "higher": 2100 },
+    "nappy": 90,
+    "milk": 180,
+    "food": 300
+  },
+  "tempzone": {
+    "start": 7,
+    "day_start": 8,
+    "evening_start": 18,
+    "night_start": 20,
+    "limit": 23
+  }
+}

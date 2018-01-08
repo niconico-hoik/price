@@ -1,0 +1,30 @@
+{
+  "name": "nicohoi-price-api",
+  "version": "0.0.0",
+  "private": true,
+  "author": "kthjm <toxictoxer@gmail.com>",
+  "repository": "kthjm/nicohoi-price-api",
+  "license": "MIT",
+  "main": "cjs.js",
+  "jsnext:main": "es.js",
+  "module": "es.js",
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  },
+  "scripts": {
+    "build:es": "cross-env NODE_ENV=ES babel index.js -o es.js",
+    "build:cjs": "cross-env NODE_ENV=CJS babel index.js -o cjs.js",
+    "build": "run-s build:es build:cjs",
+    "postbuild": "yarn format",
+    "format": "prettier --write **/*.js package.json"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "cross-env": "^5.0.5",
+    "npm-run-all": "^4.1.1",
+    "prettier": "^1.7.4"
+  }
+}
