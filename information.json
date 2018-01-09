@@ -6,7 +6,7 @@
     "month_sundry": 200,
     "month_special_time": 3000,
     "temp_morning": 1000,
-    "temp_day": { "toddler": 500, "lower": 350, "higher": 300 },
+    "temp_day": { "toddler": 500, "lower": 400, "higher": 350 },
     "temp_evening": 1000,
     "temp_night": 1500,
     "temp_allday": { "toddler": 3000, "lower": 2400, "higher": 2100 },
