@@ -1,9 +1,8 @@
 {
-  "name": "nicohoi-price-api",
+  "name": "niconico-hoik-price",
   "version": "0.0.3",
-  "private": true,
   "author": "kthjm <toxictoxer@gmail.com>",
-  "repository": "kthjm/nicohoi-price-api",
+  "repository": "niconico-hoik/price.js",
   "license": "MIT",
   "main": "cjs.js",
   "jsnext:main": "es.js",
