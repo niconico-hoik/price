@@ -1,4 +1,4 @@
-# nicohoi-price-api ![GitHub release](https://img.shields.io/github/release/niconico-hoik/price.js.svg?longCache=true&style=flat-square)
+![GitHub release](https://img.shields.io/github/release/niconico-hoik/price.js.svg?longCache=true&style=flat-square)
 
 ### getter
 - `monthEntry(): number`
