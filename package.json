@@ -1,8 +1,8 @@
 {
   "name": "niconico-hoik-price",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "kthjm <toxictoxer@gmail.com>",
-  "repository": "niconico-hoik/price.js",
+  "repository": "niconico-hoik/price",
   "license": "MIT",
   "main": "cjs.js",
   "jsnext:main": "es.js",
