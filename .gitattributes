@@ -4,6 +4,7 @@
 
 # files
 src/ export-ignore
+test.js export-ignore
 README.md export-ignore
 babel.config.js export-ignore
 rollup.config.js export-ignore
