@@ -22,6 +22,18 @@ const times = {
   },
 }
 
+const createTimes = (start_time, end_time, times) =>
+  assign(Object.entries(times).map(([ time, { min, max } ]) => {
+    if (typeof max === 'number' && start_time >= max) {
+      return { [time]: 0 }
+    } else {
+      const startTime = (typeof min === 'number' && start_time < min) ? min : start_time
+      const endTime = (typeof max === 'number' && end_time > max) ? max : end_time
+      const diff = endTime - startTime
+      return { [time]: diff > 0 ? diff : 0 }
+    }
+  }))
+
 export default class DailyCare {
   constructor({ start_time, end_time } = {}) {
     validations.time(start_time, end_time)
@@ -31,35 +43,29 @@ export default class DailyCare {
     this.times = createTimes(start_time, end_time, times)
   }
 
-  price(options) {
-    return Math.floor(
-      Object
-      .values(this.prices(options))
-      .reduce((a, c) => a + c, 0)
-    )
+  price(...arg) {
+    return Object.values(this.prices(...arg)).reduce((a, c) => a + c, 0)
   }
 
-  prices({ age, nappy, milk, food } = {}) {
+  prices(age, { nappy, milk, food } = {}) {
     const type = age2type(age)
-
     const prices = {
-      morning: daily_care.prices['morning'] * this.times['morning'],
+      care_of_morning: daily_care.prices['morning'] * this.times['morning'],
 
-      day: this.isPack
+      care_of_day: this.isPack
       ? daily_care.prices.pack[type]
       : daily_care.prices['day'][type] * this.times['day'],
 
-      evening: daily_care.prices['evening'] * this.times['evening'],
-      night: daily_care.prices['night'] * this.times['night'],
+      care_of_evening: daily_care.prices['evening'] * this.times['evening'],
+
+      care_of_night: daily_care.prices['night'] * this.times['night'],
 
       nappy: nappy
       ? daily_care.prices.options['nappy']
       : 0,
-
       milk: milk
       ? daily_care.prices.options['milk']
       : 0,
-      
       food: food
       ? daily_care.prices.options['food']
       : 0,
@@ -74,15 +80,3 @@ export default class DailyCare {
     )
   }
 }
-
-const createTimes = (start_time, end_time, times) =>
-  assign(Object.entries(times).map(([ time, { min, max } ]) => {
-    if (typeof max === 'number' && start_time >= max) {
-      return { [time]: 0 }
-    } else {
-      const startTime = (typeof min === 'number' && start_time < min) ? min : start_time
-      const endTime = (typeof max === 'number' && end_time > max) ? max : end_time
-      const diff = endTime - startTime
-      return { [time]: diff > 0 ? diff : 0 }
-    }
-  }))

@@ -203,74 +203,14 @@ _defineProperty(_times, 'night', {
   max: false
 }),
 _times)
-var DailyCare = (function() {
-  function DailyCare() {
-    var _ref =
-        arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      start_time = _ref.start_time,
-      end_time = _ref.end_time
-    _classCallCheck(this, DailyCare)
-    validations.time(start_time, end_time)
-    this.start_time = start_time
-    this.end_time = end_time
-    this.isPack = start_time >= 9 && end_time <= 17
-    this.times = createTimes(start_time, end_time, times)
-  }
-  _createClass(DailyCare, [
-    {
-      key: 'price',
-      value: function price(options) {
-        return Math.floor(
-          Object.values(this.prices(options)).reduce(function(a, c) {
-            return a + c
-          }, 0)
-        )
-      }
-    },
-    {
-      key: 'prices',
-      value: function prices() {
-        var _ref2 =
-            arguments.length > 0 && arguments[0] !== undefined
-              ? arguments[0]
-              : {},
-          age = _ref2.age,
-          nappy = _ref2.nappy,
-          milk = _ref2.milk,
-          food = _ref2.food
-        var type = age2type(age)
-        var prices = {
-          morning: daily_care.prices['morning'] * this.times['morning'],
-          day: this.isPack
-            ? daily_care.prices.pack[type]
-            : daily_care.prices['day'][type] * this.times['day'],
-          evening: daily_care.prices['evening'] * this.times['evening'],
-          night: daily_care.prices['night'] * this.times['night'],
-          nappy: nappy ? daily_care.prices.options['nappy'] : 0,
-          milk: milk ? daily_care.prices.options['milk'] : 0,
-          food: food ? daily_care.prices.options['food'] : 0
-        }
-        return assign(
-          Object.entries(prices).map(function(_ref3) {
-            var _ref4 = _slicedToArray(_ref3, 2),
-              key = _ref4[0],
-              price = _ref4[1]
-            return _defineProperty({}, key, Math.floor(price))
-          })
-        )
-      }
-    }
-  ])
-  return DailyCare
-})()
 var createTimes = function createTimes(start_time, end_time, times) {
   return assign(
-    Object.entries(times).map(function(_ref6) {
-      var _ref7 = _slicedToArray(_ref6, 2),
-        time = _ref7[0],
-        _ref7$ = _ref7[1],
-        min = _ref7$.min,
-        max = _ref7$.max
+    Object.entries(times).map(function(_ref) {
+      var _ref2 = _slicedToArray(_ref, 2),
+        time = _ref2[0],
+        _ref2$ = _ref2[1],
+        min = _ref2$.min,
+        max = _ref2$.max
       if (typeof max === 'number' && start_time >= max) {
         return _defineProperty({}, time, 0)
       } else {
@@ -283,6 +223,66 @@ var createTimes = function createTimes(start_time, end_time, times) {
     })
   )
 }
+var DailyCare = (function() {
+  function DailyCare() {
+    var _ref5 =
+        arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      start_time = _ref5.start_time,
+      end_time = _ref5.end_time
+    _classCallCheck(this, DailyCare)
+    validations.time(start_time, end_time)
+    this.start_time = start_time
+    this.end_time = end_time
+    this.isPack = start_time >= 9 && end_time <= 17
+    this.times = createTimes(start_time, end_time, times)
+  }
+  _createClass(DailyCare, [
+    {
+      key: 'price',
+      value: function price() {
+        return Object.values(this.prices.apply(this, arguments)).reduce(
+          function(a, c) {
+            return a + c
+          },
+          0
+        )
+      }
+    },
+    {
+      key: 'prices',
+      value: function prices(age) {
+        var _ref6 =
+            arguments.length > 1 && arguments[1] !== undefined
+              ? arguments[1]
+              : {},
+          nappy = _ref6.nappy,
+          milk = _ref6.milk,
+          food = _ref6.food
+        var type = age2type(age)
+        var prices = {
+          care_of_morning: daily_care.prices['morning'] * this.times['morning'],
+          care_of_day: this.isPack
+            ? daily_care.prices.pack[type]
+            : daily_care.prices['day'][type] * this.times['day'],
+          care_of_evening: daily_care.prices['evening'] * this.times['evening'],
+          care_of_night: daily_care.prices['night'] * this.times['night'],
+          nappy: nappy ? daily_care.prices.options['nappy'] : 0,
+          milk: milk ? daily_care.prices.options['milk'] : 0,
+          food: food ? daily_care.prices.options['food'] : 0
+        }
+        return assign(
+          Object.entries(prices).map(function(_ref7) {
+            var _ref8 = _slicedToArray(_ref7, 2),
+              key = _ref8[0],
+              price = _ref8[1]
+            return _defineProperty({}, key, Math.floor(price))
+          })
+        )
+      }
+    }
+  ])
+  return DailyCare
+})()
 
 var monthly_care = constants$1.monthly_care,
   daily_care$1 = constants$1.daily_care
@@ -294,7 +294,7 @@ var MonthlyCare = (function() {
       start_time = _ref.start_time,
       end_time = _ref.end_time
     _classCallCheck(this, MonthlyCare)
-    asserts(Array.isArray(week), 'week is required')
+    asserts(Array.isArray(week) && week.length === 7, 'week is required')
     validations.time(start_time, end_time)
     this.week = week
     this.start_time = start_time
@@ -304,11 +304,21 @@ var MonthlyCare = (function() {
     {
       key: 'price',
       value: function price() {
+        return Object.values(this.prices.apply(this, arguments)).reduce(
+          function(a, c) {
+            return a + c
+          },
+          0
+        )
+      }
+    },
+    {
+      key: 'prices',
+      value: function prices(age) {
         var _ref2 =
-            arguments.length > 0 && arguments[0] !== undefined
-              ? arguments[0]
+            arguments.length > 1 && arguments[1] !== undefined
+              ? arguments[1]
               : {},
-          age = _ref2.age,
           entry = _ref2.entry,
           elder = _ref2.elder,
           food = _ref2.food
@@ -318,15 +328,20 @@ var MonthlyCare = (function() {
         }).length
         var timeByDate = this.end_time - this.start_time
         return {
+          care_of_init: monthly_care.prices.init[type],
+          care_of_days: monthly_care.prices['charge'] * daysByWeek,
+          care_of_time: monthly_care.prices['charge'] * timeByDate,
           sundry: monthly_care.prices['sundry'],
           entry: entry ? monthly_care.prices['entry'] / (elder ? 2 : 1) : 0,
           food: food
             ? daily_care$1.prices.options['food'] * (daysByWeek * 4 + 1)
             : 0,
-          care:
-            monthly_care.prices.init[type] +
-            monthly_care.prices['charge'] * daysByWeek +
-            monthly_care.prices['charge'] * timeByDate
+          special_of_sunday:
+            this.week[0] === 1 ? monthly_care.prices.special_time : 0,
+          special_of_morning:
+            this.start_time < 8 ? monthly_care.prices.special_time : 0,
+          special_of_night:
+            this.end_time > 18 ? monthly_care.prices.special_time : 0
         }
       }
     }
