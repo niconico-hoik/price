@@ -1,30 +1,23 @@
 import constants from './constants'
-import {
-  normalizeStartTime,
-  normalizeEndTime,
-  time2string,
-  asserts,
-  assign,
-  age2type,
-  validations,
-} from './util'
+import * as util from './util'
 
 const { monthly_care, daily_care } = constants
 
 export default class MonthlyCare {
   constructor({ week, start_time, end_time } = {}) {
-    asserts(Array.isArray(week) && week.length === 7, `week is required`)
-    validations.time(start_time, end_time)
+    util.asserts(Array.isArray(week), `week is required`)
+    util.asserts(week.length === 7, `${week} is invalid week`)
+    util.validations.time(start_time, end_time)
 
     this.raw_start_time = start_time
-    this.start_time = normalizeStartTime(start_time)
-    this.raw_start_time_string = time2string(start_time)
-    this.start_time_string = time2string(this.start_time)
+    this.start_time = util.normalizeStartTime(start_time)
+    this.raw_start_time_string = util.time2string(start_time)
+    this.start_time_string = util.time2string(this.start_time)
 
     this.raw_end_time = end_time
-    this.end_time = normalizeEndTime(end_time)
-    this.raw_end_time_string = time2string(end_time)
-    this.end_time_string = time2string(this.end_time)
+    this.end_time = util.normalizeEndTime(end_time)
+    this.raw_end_time_string = util.time2string(end_time)
+    this.end_time_string = util.time2string(this.end_time)
 
     this.week = week
 
@@ -36,7 +29,7 @@ export default class MonthlyCare {
   }
 
   prices(age, { entry, elder, food } = {}) {
-    const type = age2type(age)
+    const type = util.age2type(age)
     const daysByWeek = this.week.filter(num => num === 1).length
     const timeByDate = this.end_time - this.start_time
 
@@ -64,7 +57,7 @@ export default class MonthlyCare {
       : 0,
     }
 
-    return assign(
+    return util.assign(
       Object
       .entries(prices)
       .map(([ key, price ]) => ({

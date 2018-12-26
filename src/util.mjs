@@ -23,8 +23,8 @@ export const age2type = (age) =>
   typeof age === 'number'
   ?
   types[
-    age <= 2  ? 0 :
-    age <= 6  ? 1 :
+    age <= 2 ? 0 :
+    age <= 6 ? 1 :
     age <= 9 ? 2 :
     3
   ]

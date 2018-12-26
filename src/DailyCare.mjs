@@ -1,13 +1,5 @@
 import constants from './constants'
-import {
-  normalizeStartTime,
-  normalizeEndTime,
-  time2string,
-  asserts,
-  assign,
-  age2type,
-  validations,
-} from './util'
+import * as util from './util'
 
 const { daily_care } = constants
 
@@ -31,7 +23,7 @@ const times = {
 }
 
 const createTimes = (start_time, end_time, times) =>
-  assign(Object.entries(times).map(([ time, { min, max } ]) => {
+  util.assign(Object.entries(times).map(([ time, { min, max } ]) => {
     if (typeof max === 'number' && start_time >= max) {
       return { [time]: 0 }
     } else {
@@ -44,17 +36,17 @@ const createTimes = (start_time, end_time, times) =>
 
 export default class DailyCare {
   constructor({ start_time, end_time } = {}) {
-    validations.time(start_time, end_time)
+    util.validations.time(start_time, end_time)
 
     this.raw_start_time = start_time
-    this.start_time = normalizeStartTime(start_time)
-    this.raw_start_time_string = time2string(start_time)
-    this.start_time_string = time2string(this.start_time)
+    this.start_time = util.normalizeStartTime(start_time)
+    this.raw_start_time_string = util.time2string(start_time)
+    this.start_time_string = util.time2string(this.start_time)
 
     this.raw_end_time = end_time
-    this.end_time = normalizeEndTime(end_time)
-    this.raw_end_time_string = time2string(end_time)
-    this.end_time_string = time2string(this.end_time)
+    this.end_time = util.normalizeEndTime(end_time)
+    this.raw_end_time_string = util.time2string(end_time)
+    this.end_time_string = util.time2string(this.end_time)
 
     this.isPack = this.start_time >= 9 && this.end_time <= 17 // which????
     this.times = createTimes(this.start_time, this.end_time, times)
@@ -67,7 +59,7 @@ export default class DailyCare {
   }
 
   prices(age, { nappy, milk, food } = {}) {
-    const type = age2type(age)
+    const type = util.age2type(age)
 
     const prices = {
       care_of_morning: daily_care.prices['morning'] * this.times['morning'],
@@ -91,7 +83,7 @@ export default class DailyCare {
       : 0,
     }
 
-    return assign(
+    return util.assign(
       Object
       .entries(prices)
       .map(([ key, price ]) => ({

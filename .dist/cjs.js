@@ -291,7 +291,8 @@ var MonthlyCare = (function() {
       start_time = _ref.start_time,
       end_time = _ref.end_time
     _classCallCheck(this, MonthlyCare)
-    asserts(Array.isArray(week) && week.length === 7, 'week is required')
+    asserts(Array.isArray(week), 'week is required')
+    asserts(week.length === 7, ''.concat(week, ' is invalid week'))
     validations.time(start_time, end_time)
     this.raw_start_time = start_time
     this.start_time = normalizeStartTime(start_time)

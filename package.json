@@ -10,6 +10,9 @@
   "nyc": {
     "require": [
       "@babel/register"
+    ],
+    "include": [
+      "src"
     ]
   },
   "scripts": {
