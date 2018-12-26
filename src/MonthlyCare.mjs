@@ -1,5 +1,13 @@
-import constants from './constants.js'
-import { asserts, age2type, validations } from './util'
+import constants from './constants'
+import {
+  normalizeStartTime,
+  normalizeEndTime,
+  time2string,
+  asserts,
+  assign,
+  age2type,
+  validations,
+} from './util'
 
 const { monthly_care, daily_care } = constants
 
@@ -7,9 +15,20 @@ export default class MonthlyCare {
   constructor({ week, start_time, end_time } = {}) {
     asserts(Array.isArray(week) && week.length === 7, `week is required`)
     validations.time(start_time, end_time)
+
+    this.raw_start_time = start_time
+    this.start_time = normalizeStartTime(start_time)
+    this.raw_start_time_string = time2string(start_time)
+    this.start_time_string = time2string(this.start_time)
+
+    this.raw_end_time = end_time
+    this.end_time = normalizeEndTime(end_time)
+    this.raw_end_time_string = time2string(end_time)
+    this.end_time_string = time2string(this.end_time)
+
     this.week = week
-    this.start_time = start_time
-    this.end_time = end_time
+
+    Object.freeze(this)
   }
 
   price(...arg) {
@@ -20,7 +39,8 @@ export default class MonthlyCare {
     const type = age2type(age)
     const daysByWeek = this.week.filter(num => num === 1).length
     const timeByDate = this.end_time - this.start_time
-    return {
+
+    const prices = {
       care_of_init: monthly_care.prices.init[type],
       care_of_days: monthly_care.prices['charge'] * daysByWeek,
       care_of_time: monthly_care.prices['charge'] * timeByDate,
@@ -34,14 +54,22 @@ export default class MonthlyCare {
       : 0,
 
       special_of_sunday: this.week[0] === 1
-      ? monthly_care.prices.special_time
+      ? monthly_care.prices.special
       : 0,
       special_of_morning: this.start_time < 8
-      ? monthly_care.prices.special_time
+      ? monthly_care.prices.special
       : 0,
       special_of_night: this.end_time > 18
-      ? monthly_care.prices.special_time
+      ? monthly_care.prices.special
       : 0,
     }
+
+    return assign(
+      Object
+      .entries(prices)
+      .map(([ key, price ]) => ({
+        [key]: Math.floor(price)
+      }))
+    )
   }
 }

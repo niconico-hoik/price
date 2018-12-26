@@ -1,24 +1,5 @@
-import setGetter from 'set-getter'
+import deepfreeze from 'deep-freeze'
 import constants from '../constants.json'
-
-function _typeof(obj) {
-  if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-    _typeof = function(obj) {
-      return typeof obj
-    }
-  } else {
-    _typeof = function(obj) {
-      return obj &&
-        typeof Symbol === 'function' &&
-        obj.constructor === Symbol &&
-        obj !== Symbol.prototype
-        ? 'symbol'
-        : typeof obj
-    }
-  }
-
-  return _typeof(obj)
-}
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -128,24 +109,7 @@ function _nonIterableRest() {
   throw new TypeError('Invalid attempt to destructure non-iterable instance')
 }
 
-var createPureGetters = function createPureGetters(obj, parentKey) {
-  var result =
-    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {}
-  var isRoot = !parentKey
-  Object.entries(obj).forEach(function(_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-      subKey = _ref2[0],
-      value = _ref2[1]
-    var key = isRoot ? subKey : ''.concat(parentKey, '.').concat(subKey)
-    return Array.isArray(value) || _typeof(value) !== 'object'
-      ? setGetter(result, key, function() {
-          return value
-        })
-      : createPureGetters(value, key, result)
-  })
-  return isRoot && result
-}
-var constants$1 = createPureGetters(constants)
+var constants$1 = deepfreeze(constants)
 
 var throws = function throws(message) {
   throw new Error(message)
@@ -156,14 +120,6 @@ var asserts = function asserts(condition, message) {
 var assign = function assign(objects) {
   return Object.assign.apply(Object, [{}].concat(_toConsumableArray(objects)))
 }
-var types = ['infant', 'toddler', 'lower', 'higher']
-var age2type = function age2type(age) {
-  return typeof age === 'number'
-    ? types[age < 3 ? 0 : age < 7 ? 1 : age < 10 ? 2 : 3]
-    : types.find(function(type) {
-        return type === age
-      }) || throws('age is required but '.concat(age, ' is invalid'))
-}
 var validations = {
   time: function time(start_time, end_time) {
     asserts(start_time, 'start_time is required')
@@ -173,6 +129,40 @@ var validations = {
       'end_time - start_time = '.concat(end_time - start_time)
     )
   }
+}
+var types = ['infant', 'toddler', 'lower', 'higher']
+var age2type = function age2type(age) {
+  return typeof age === 'number'
+    ? types[age <= 2 ? 0 : age <= 6 ? 1 : age <= 9 ? 2 : 3]
+    : types.find(function(type) {
+        return type === age
+      }) || throws('age is required but '.concat(age, ' is invalid'))
+}
+var timeWithPrefix = function timeWithPrefix(time) {
+  return ''.concat(time < 10 ? '0' : '').concat(time)
+}
+var time2string = function time2string(time) {
+  var hours = Math.floor(time)
+  var minutes = Math.round((time - hours) * 60)
+  return ''.concat(hours, ':').concat(timeWithPrefix(minutes))
+}
+var string2time = function string2time(string) {
+  var _string$split$map = string.split(':').map(Number),
+    _string$split$map2 = _slicedToArray(_string$split$map, 2),
+    hours = _string$split$map2[0],
+    minutes = _string$split$map2[1]
+  var flooredMinutes = Math.floor((minutes / 60) * 100) / 100
+  return hours + flooredMinutes
+}
+var normalizeStartTime = function normalizeStartTime(time) {
+  var hours = Math.floor(time)
+  var minutes = Math.round((time - hours) * 60)
+  return hours + (minutes >= 50 ? 1 : minutes >= 20 ? 0.5 : 0)
+}
+var normalizeEndTime = function normalizeEndTime(time) {
+  var hours = Math.floor(time)
+  var minutes = Math.round((time - hours) * 60)
+  return hours + (minutes <= 10 ? 0 : minutes <= 40 ? 0.5 : 1)
 }
 
 var _times
@@ -223,10 +213,17 @@ var DailyCare = (function() {
       end_time = _ref5.end_time
     _classCallCheck(this, DailyCare)
     validations.time(start_time, end_time)
-    this.start_time = start_time
-    this.end_time = end_time
-    this.isPack = start_time >= 9 && end_time <= 17
-    this.times = createTimes(start_time, end_time, times)
+    this.raw_start_time = start_time
+    this.start_time = normalizeStartTime(start_time)
+    this.raw_start_time_string = time2string(start_time)
+    this.start_time_string = time2string(this.start_time)
+    this.raw_end_time = end_time
+    this.end_time = normalizeEndTime(end_time)
+    this.raw_end_time_string = time2string(end_time)
+    this.end_time_string = time2string(this.end_time)
+    this.isPack = this.start_time >= 9 && this.end_time <= 17
+    this.times = createTimes(this.start_time, this.end_time, times)
+    Object.freeze(this)
   }
   _createClass(DailyCare, [
     {
@@ -288,9 +285,16 @@ var MonthlyCare = (function() {
     _classCallCheck(this, MonthlyCare)
     asserts(Array.isArray(week) && week.length === 7, 'week is required')
     validations.time(start_time, end_time)
+    this.raw_start_time = start_time
+    this.start_time = normalizeStartTime(start_time)
+    this.raw_start_time_string = time2string(start_time)
+    this.start_time_string = time2string(this.start_time)
+    this.raw_end_time = end_time
+    this.end_time = normalizeEndTime(end_time)
+    this.raw_end_time_string = time2string(end_time)
+    this.end_time_string = time2string(this.end_time)
     this.week = week
-    this.start_time = start_time
-    this.end_time = end_time
+    Object.freeze(this)
   }
   _createClass(MonthlyCare, [
     {
@@ -319,7 +323,7 @@ var MonthlyCare = (function() {
           return num === 1
         }).length
         var timeByDate = this.end_time - this.start_time
-        return {
+        var prices = {
           care_of_init: monthly_care.prices.init[type],
           care_of_days: monthly_care.prices['charge'] * daysByWeek,
           care_of_time: monthly_care.prices['charge'] * timeByDate,
@@ -329,16 +333,37 @@ var MonthlyCare = (function() {
             ? daily_care$1.prices.options['food'] * (daysByWeek * 4 + 1)
             : 0,
           special_of_sunday:
-            this.week[0] === 1 ? monthly_care.prices.special_time : 0,
+            this.week[0] === 1 ? monthly_care.prices.special : 0,
           special_of_morning:
-            this.start_time < 8 ? monthly_care.prices.special_time : 0,
-          special_of_night:
-            this.end_time > 18 ? monthly_care.prices.special_time : 0
+            this.start_time < 8 ? monthly_care.prices.special : 0,
+          special_of_night: this.end_time > 18 ? monthly_care.prices.special : 0
         }
+        return assign(
+          Object.entries(prices).map(function(_ref3) {
+            var _ref4 = _slicedToArray(_ref3, 2),
+              key = _ref4[0],
+              price = _ref4[1]
+            return _defineProperty({}, key, Math.floor(price))
+          })
+        )
       }
     }
   ])
   return MonthlyCare
 })()
 
-export { DailyCare, MonthlyCare, constants$1 as constants }
+export {
+  DailyCare,
+  MonthlyCare,
+  constants$1 as constants,
+  throws,
+  asserts,
+  assign,
+  validations,
+  types,
+  age2type,
+  time2string,
+  string2time,
+  normalizeStartTime,
+  normalizeEndTime
+}

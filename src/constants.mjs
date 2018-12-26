@@ -1,5 +1,10 @@
-import setGetter from 'set-getter'
+import deepfreeze from 'deep-freeze'
 import constants from '../constants.json'
+
+export default deepfreeze(constants)
+
+/*
+import setGetter from 'set-getter'
 
 const createPureGetters = (obj, parentKey, result = {}) => {
   const isRoot = !parentKey
@@ -18,3 +23,4 @@ const createPureGetters = (obj, parentKey, result = {}) => {
 }
 
 export default createPureGetters(constants)
+*/

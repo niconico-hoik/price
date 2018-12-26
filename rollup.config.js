@@ -16,12 +16,11 @@ const babel = Babel({
   ]
 })
 
-const autoexternal = AutoExternal({
-
-})
+const autoexternal = AutoExternal({})
 
 const cleanup = Cleanup({
-  comments: 'some'
+  comments: 'some',
+  extensions: [ '.mjs', '.json' ]
 })
 
 const prettier = Prettier({
@@ -32,7 +31,7 @@ const prettier = Prettier({
 })
 
 const Config = (format) => ({
-  input: 'src/index.js',
+  input: 'src/index.mjs',
   output: {
     format,
     file: `.dist/${format}.js`,
