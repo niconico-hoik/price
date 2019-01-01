@@ -150,11 +150,14 @@ var timeWithPrefix = function timeWithPrefix(time) {
   return ''.concat(time < 10 ? '0' : '').concat(time)
 }
 var time2string = function time2string(time) {
+  asserts(typeof time === 'number', ''.concat(time, ' is invalid'))
   var hours = Math.floor(time)
   var minutes = Math.round((time - hours) * 60)
   return ''.concat(hours, ':').concat(timeWithPrefix(minutes))
 }
 var string2time = function string2time(string) {
+  asserts(string, 'string is required')
+  asserts(typeof string === 'string', ''.concat(string, ' is invalid'))
   var _string$split$map = string.split(':').map(Number),
     _string$split$map2 = _slicedToArray(_string$split$map, 2),
     hours = _string$split$map2[0],

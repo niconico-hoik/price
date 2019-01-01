@@ -17,7 +17,7 @@
   },
   "scripts": {
     "nod": "node -r @babel/register",
-    "test": "cross-env BABEL_ENV=test nyc mocha test*",
+    "test": "cross-env BABEL_ENV=test nyc mocha test/*.*",
     "build": "rollup -c"
   },
   "dependencies": {

@@ -36,12 +36,15 @@ const timeWithPrefix = (time) =>
   `${time < 10 ? '0' : ''}${time}`
 
 export const time2string = (time) => {
+  asserts(typeof time === 'number', `${time} is invalid`)
   const hours = Math.floor(time)
   const minutes = Math.round((time - hours) * 60)
   return `${hours}:${timeWithPrefix(minutes)}`
 }
 
 export const string2time = (string) => {
+  asserts(string, `string is required`)
+  asserts(typeof string === 'string', `${string} is invalid`)
   const [hours, minutes] = string.split(':').map(Number)
   const flooredMinutes = Math.floor((minutes / 60) * 100) / 100
   return hours + flooredMinutes
