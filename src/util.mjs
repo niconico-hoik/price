@@ -35,10 +35,20 @@ export const age2type = (age) =>
 const timeWithPrefix = (time) =>
   `${time < 10 ? '0' : ''}${time}`
 
-export const time2string = (time) => {
+export const separateTime = (time) => {
   asserts(typeof time === 'number', `${time} is invalid`)
   const hours = Math.floor(time)
   const minutes = Math.round((time - hours) * 60)
+  return { hours, minutes }
+}
+
+export const time2minutes = (time) => {
+  const { hours, minutes } = separateTime(time)
+  return (hours * 60) + minutes
+}
+
+export const time2string = (time) => {
+  const { hours, minutes } = separateTime(time)
   return `${hours}:${timeWithPrefix(minutes)}`
 }
 
@@ -51,8 +61,7 @@ export const string2time = (string) => {
 }
 
 export const normalizeStartTime = (time) => {
-  const hours = Math.floor(time)
-  const minutes = Math.round((time - hours) * 60)
+  const { hours, minutes } = separateTime(time)
   return hours + (
     minutes >= 50 ? 1 :
     minutes >= 20 ? 0.5 :
@@ -61,8 +70,7 @@ export const normalizeStartTime = (time) => {
 }
 
 export const normalizeEndTime = (time) => {
-  const hours = Math.floor(time)
-  const minutes = Math.round((time - hours) * 60)
+  const { hours, minutes } = separateTime(time)
   return hours + (
     minutes <= 10 ? 0 :
     minutes <= 40 ? 0.5 :

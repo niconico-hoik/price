@@ -38,7 +38,7 @@ it('age2type', () => {
 
 it('string2time/time2string', () => {
   const { string2time, time2string } = modules
-  
+
   const test = (timeString) =>
     assert.equal(time2string(string2time(timeString)), timeString)
 
@@ -46,6 +46,17 @@ it('string2time/time2string', () => {
   test('10:25')
   test('10:32')
   test('10:50')
+})
+
+it('time2minutes', () => {
+  const { time2minutes, string2time } = modules
+
+  const test = (timeString, expectMinutes) =>
+    assert.equal(time2minutes(string2time(timeString)), expectMinutes)
+
+  test('1:25', 85)
+  test('4:40', 280)
+  test('10:52', 652)
 })
 
 it('normalizeStartTime', () => {
