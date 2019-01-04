@@ -149,10 +149,25 @@ var age2type = function age2type(age) {
 var timeWithPrefix = function timeWithPrefix(time) {
   return ''.concat(time < 10 ? '0' : '').concat(time)
 }
-var time2string = function time2string(time) {
+var separateTime = function separateTime(time) {
   asserts(typeof time === 'number', ''.concat(time, ' is invalid'))
   var hours = Math.floor(time)
   var minutes = Math.round((time - hours) * 60)
+  return {
+    hours: hours,
+    minutes: minutes
+  }
+}
+var time2minutes = function time2minutes(time) {
+  var _separateTime = separateTime(time),
+    hours = _separateTime.hours,
+    minutes = _separateTime.minutes
+  return hours * 60 + minutes
+}
+var time2string = function time2string(time) {
+  var _separateTime2 = separateTime(time),
+    hours = _separateTime2.hours,
+    minutes = _separateTime2.minutes
   return ''.concat(hours, ':').concat(timeWithPrefix(minutes))
 }
 var string2time = function string2time(string) {
@@ -166,13 +181,15 @@ var string2time = function string2time(string) {
   return hours + flooredMinutes
 }
 var normalizeStartTime = function normalizeStartTime(time) {
-  var hours = Math.floor(time)
-  var minutes = Math.round((time - hours) * 60)
+  var _separateTime3 = separateTime(time),
+    hours = _separateTime3.hours,
+    minutes = _separateTime3.minutes
   return hours + (minutes >= 50 ? 1 : minutes >= 20 ? 0.5 : 0)
 }
 var normalizeEndTime = function normalizeEndTime(time) {
-  var hours = Math.floor(time)
-  var minutes = Math.round((time - hours) * 60)
+  var _separateTime4 = separateTime(time),
+    hours = _separateTime4.hours,
+    minutes = _separateTime4.minutes
   return hours + (minutes <= 10 ? 0 : minutes <= 40 ? 0.5 : 1)
 }
 
@@ -373,6 +390,8 @@ exports.assign = assign
 exports.validations = validations
 exports.types = types
 exports.age2type = age2type
+exports.separateTime = separateTime
+exports.time2minutes = time2minutes
 exports.time2string = time2string
 exports.string2time = string2time
 exports.normalizeStartTime = normalizeStartTime
