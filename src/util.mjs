@@ -56,7 +56,7 @@ export const string2time = (string) => {
   asserts(string, `string is required`)
   asserts(typeof string === 'string', `${string} is invalid`)
   const [hours, minutes] = string.split(':').map(Number)
-  const flooredMinutes = Math.floor((minutes / 60) * 100) / 100
+  const flooredMinutes = !minutes ? 0 : Math.floor((minutes / 60) * 100) / 100
   return hours + flooredMinutes
 }
 

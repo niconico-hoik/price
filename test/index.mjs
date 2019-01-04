@@ -39,13 +39,14 @@ it('age2type', () => {
 it('string2time/time2string', () => {
   const { string2time, time2string } = modules
 
-  const test = (timeString) =>
-    assert.equal(time2string(string2time(timeString)), timeString)
+  const test = (timeString, expectString = timeString) =>
+    assert.equal(time2string(string2time(timeString)), expectString)
 
   test('10:08')
   test('10:25')
   test('10:32')
   test('10:50')
+  test('10', '10:00')
 })
 
 it('time2minutes', () => {

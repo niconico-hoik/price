@@ -177,7 +177,7 @@ var string2time = function string2time(string) {
     _string$split$map2 = _slicedToArray(_string$split$map, 2),
     hours = _string$split$map2[0],
     minutes = _string$split$map2[1]
-  var flooredMinutes = Math.floor((minutes / 60) * 100) / 100
+  var flooredMinutes = !minutes ? 0 : Math.floor((minutes / 60) * 100) / 100
   return hours + flooredMinutes
 }
 var normalizeStartTime = function normalizeStartTime(time) {
