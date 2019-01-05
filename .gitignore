@@ -1,3 +1,7 @@
+# index.cjs.js
+# index.esm.js
+# .dist/
+
 # Logs
 logs
 *.log

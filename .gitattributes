@@ -3,7 +3,8 @@
 .gitattributes export-ignore
 
 # files
-.babelrc export-ignore
+src/ export-ignore
+test/ export-ignore
 README.md export-ignore
-index.js export-ignore
+*.config.js export-ignore
 yarn.lock export-ignore

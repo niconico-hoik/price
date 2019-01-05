@@ -1,29 +1,42 @@
 {
   "name": "niconico-hoik-price",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "author": "kthjm <toxictoxer@gmail.com>",
   "repository": "niconico-hoik/price",
   "license": "MIT",
-  "main": "cjs.js",
-  "jsnext:main": "es.js",
-  "module": "es.js",
-  "prettier": {
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true
+  "main": ".dist/cjs.js",
+  "jsnext:main": ".dist/es.js",
+  "module": ".dist/es.js",
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "include": [
+      "src"
+    ]
   },
   "scripts": {
-    "build:es": "cross-env NODE_ENV=ES babel index.js -o es.js",
-    "build:cjs": "cross-env NODE_ENV=CJS babel index.js -o cjs.js",
-    "build": "run-s build:es build:cjs",
-    "postbuild": "yarn format",
-    "format": "prettier --write **/*.js package.json"
+    "nod": "node -r @babel/register",
+    "test": "cross-env BABEL_ENV=test nyc mocha test/*.*",
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "deep-freeze": "^0.0.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "cross-env": "^5.0.5",
-    "npm-run-all": "^4.1.1",
-    "prettier": "^1.7.4"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-istanbul": "^5.1.0",
+    "babel-preset-power-assert": "^3.0.0",
+    "cross-env": "^5.2.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "power-assert": "^1.6.1",
+    "rollup": "^0.68.0",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-babel": "^4.1.0",
+    "rollup-plugin-cleanup": "^3.0.0",
+    "rollup-plugin-prettier": "^0.5.0"
   }
 }

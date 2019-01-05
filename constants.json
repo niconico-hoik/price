@@ -1,0 +1,45 @@
+{
+  "monthly_care": {
+    "prices": {
+      "init": {
+        "infant": 11000,
+        "toddler": 8000,
+        "lower": 8000,
+        "higher": 8000
+      },
+      "entry": 5000,
+      "charge": 2000,
+      "sundry": 200,
+      "special": 3000
+    }
+  },
+  "daily_care": {
+    "milestones": {
+      "morning2day": 8,
+      "day2evening": 18,
+      "evening2night": 20
+    },
+    "prices": {
+      "morning": 1000,
+      "day": {
+        "infant": 500,
+        "toddler": 500,
+        "lower": 400,
+        "higher": 350
+      },
+      "evening": 1000,
+      "night": 1500,
+      "pack": {
+        "infant": 3000,
+        "toddler": 3000,
+        "lower": 2400,
+        "higher": 2100
+      },
+      "options": {
+        "nappy": 90,
+        "milk": 180,
+        "food": 300
+      }
+    }
+  }
+}
